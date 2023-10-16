@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: wbrms-food-delivery
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'info, health'
