@@ -53,6 +53,6 @@ jobs:
         run: |
           mvn clean package
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --local-only
+      - run: flyctl deploy --local-only --wait-timeout 90
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
