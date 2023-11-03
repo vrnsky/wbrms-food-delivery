@@ -11,16 +11,16 @@ public record Delivery(
         @Schema(description = "Creation time")
         LocalDateTime createdDateTime,
 
-        @Schema(description = "Customer's name")
+        @Schema(description = "Customer's name", example = "John Doe")
         String customer,
 
         @Schema(description = "Number of items")
         int items,
 
-        @Schema(description = "Price")
+        @Schema(description = "Price", example = "100.51")
         BigDecimal amount,
 
-        @Schema(description = "Delivery status")
+        @Schema(description = "Delivery status", example = "Created, Preparing, Delivering, Delivered")
         String deliveryStatus
 ) {
 }
