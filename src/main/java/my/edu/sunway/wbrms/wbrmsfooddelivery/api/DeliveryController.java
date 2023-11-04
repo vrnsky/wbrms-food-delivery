@@ -1,38 +1,45 @@
 package my.edu.sunway.wbrms.wbrmsfooddelivery.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import my.edu.sunway.wbrms.wbrmsfooddelivery.dto.Delivery;
 import my.edu.sunway.wbrms.wbrmsfooddelivery.service.DeliveryService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 
-import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/delivery")
 @RequiredArgsConstructor
 public class DeliveryController {
 
     private final DeliveryService deliveryService;
 
-    @GetMapping("/list")
-    public Mono<List<Delivery>> list() {
-        return Mono.just(deliveryService.getDefaultDeliveries());
-    }
-
+    @Operation(summary = "Creation of new delivery entity")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     @PostMapping("/create")
-    public Mono<Delivery> create(@RequestBody Delivery delivery) {
-        return Mono.empty();
+    public Delivery createDelivery(
+            @Parameter(description = "Parameters of delivery") @RequestBody @Valid Delivery delivery) {
+        return deliveryService.createDelivery(delivery);
     }
 
-    @PutMapping("/update/{deliveryId}")
-    public Mono<Delivery> update(@PathVariable String deliveryId, @RequestBody Delivery delivery) {
-        return Mono.empty();
+    @Operation(summary = "Update existing delivery")
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/update/{id}")
+    public Delivery updateDelivery(
+            @Parameter(name = "id", description = "ID of existing delivery") @PathVariable UUID id,
+            @Parameter(description = "New definition of delivery") @RequestBody @Valid Delivery delivery
+    ) {
+        return deliveryService.updateDelivery(id, delivery);
     }
 
-    @DeleteMapping("/delete/{deliveryId}")
-    public Mono<?> delete(@PathVariable String deliveryId) {
-        return Mono.empty();
+    @Operation(summary = "Cancel existing delivery")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/cancel/{id}")
+    public void cancelDelivery(
+            @Parameter(name = "id", description = "ID of existing delivery") @PathVariable(name = "id") UUID id) {
+        deliveryService.cancelDelivery(id);
     }
-
 }

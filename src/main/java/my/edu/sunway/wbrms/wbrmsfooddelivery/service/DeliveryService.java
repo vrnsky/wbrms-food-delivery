@@ -1,31 +1,40 @@
 package my.edu.sunway.wbrms.wbrmsfooddelivery.service;
 
+import lombok.RequiredArgsConstructor;
 import my.edu.sunway.wbrms.wbrmsfooddelivery.dto.Delivery;
-import my.edu.sunway.wbrms.wbrmsfooddelivery.dto.DeliveryStatus;
+import my.edu.sunway.wbrms.wbrmsfooddelivery.entity.DeliveryEntity;
+import my.edu.sunway.wbrms.wbrmsfooddelivery.exception.NotFoundDeliveryException;
+import my.edu.sunway.wbrms.wbrmsfooddelivery.repository.DeliveryRepository;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class DeliveryService {
 
-    public List<Delivery> getDefaultDeliveries() {
-        var deliveries = new ArrayList<Delivery>();
-        for (var index = 0; index < 20; index++) {
-            var deliveryStatus = index < 5 ? DeliveryStatus.Preparing : DeliveryStatus.ReadyForDelivery;
-            var delivery = new Delivery(
-                    LocalDateTime.now().minusDays(index).plusMinutes(index),
-                    "Customer Name",
-                    (index + 1) * 3 / 2,
-                    BigDecimal.valueOf((index + 1) * 10L),
-                    deliveryStatus.getDescription()
-            );
-            deliveries.add(delivery);
-        }
+    private final DeliveryRepository deliveryRepository;
 
-        return deliveries;
+    public Delivery createDelivery(Delivery delivery) {
+        var savedDelivery = deliveryRepository.save(DeliveryEntity.fromDelivery(delivery));
+        return Delivery.fromDeliveryEntity(savedDelivery);
+    }
+
+    public Delivery updateDelivery(UUID id, Delivery delivery) {
+        var existingDelivery = deliveryRepository.findById(id);
+        if (existingDelivery.isEmpty()) {
+            throw new NotFoundDeliveryException("Delivery with ID = " + id + " not found");
+        }
+        var updateDeliveryEntity = deliveryRepository.save(DeliveryEntity.fromDelivery(delivery));
+        return Delivery.fromDeliveryEntity(updateDeliveryEntity);
+    }
+
+    public void cancelDelivery(UUID id) {
+        var existingDelivery = deliveryRepository.findById(id);
+        if (existingDelivery.isEmpty()) {
+            throw new NotFoundDeliveryException("Delivery with ID = " + id + " not found");
+        }
+        var cancelledDelivery = Delivery.canceledDelivery(Delivery.fromDeliveryEntity(existingDelivery.get()));
+        deliveryRepository.save(DeliveryEntity.fromDelivery(cancelledDelivery));
     }
 }
