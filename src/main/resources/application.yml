@@ -1,8 +1,8 @@
-server:
-  port: 8080
 spring:
   application:
     name: wbrms-food-delivery
+  liquibase:
+    change-log: classpath:db/changelog.yml
 management:
   endpoints:
     web:

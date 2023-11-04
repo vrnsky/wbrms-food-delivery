@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-deliverables
+      author: Egor Voronianskii
+      changes:
+        - createTable:
+            tableName: deliverables
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created_date_time
+                  type: TIMESTAMP WITHOUT TIMEZONE
+              - column:
+                  name: customer
+                  type: VARCHAR(255)
+              - column:
+                  name: amount
+                  type: NUMERIC
+              - column:
+                  name: delivery_status
+                  type: VARCHAR(255)
+              - column:
+                  name: delivery_type
+                  type: VARCHAR(255)
+              - column:
+                  name: partner
+                  type: VARCHAR(255)
+              - column:
+                  name: delivery_time
+                  type: TIMESTAMP WITHOUT TIMEZONE
+              - column:
+                  name: cancellation_date_time
+                  type: TIMESTAMP WITHOUT TIMEZONE
+              - column:
+                  name: cancellation_reason
+                  type: VARCHAR(1000)

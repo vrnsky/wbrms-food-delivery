@@ -5,13 +5,11 @@ import lombok.Getter;
 @Getter
 public enum DeliveryStatus {
 
-    ReadyForDelivery("Ready for Delivery"),
-    Preparing("Preparing"),
-    Received("Received");
+    Created,
+    Preparing,
+    ReadyForDelivery,
+    Delivering,
+    Received,
+    Cancelled
 
-    private final String description;
-
-    DeliveryStatus(String description) {
-        this.description = description;
-    }
 }
