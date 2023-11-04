@@ -8,7 +8,9 @@ import my.edu.sunway.wbrms.wbrmsfooddelivery.entity.DeliveryEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Schema(description = "Definition of order delivery")
 public record Delivery(
@@ -61,6 +63,12 @@ public record Delivery(
                 delivery.getCancellationDateTime(),
                 delivery.getCancellationReason()
         );
+    }
+
+    public static List<Delivery> fromDeliveryEntities(List<DeliveryEntity> deliveryEntities) {
+        return deliveryEntities.stream()
+                .map(Delivery::fromDeliveryEntity)
+                .collect(Collectors.toList());
     }
 
     public static Delivery canceledDelivery(Delivery delivery) {
